@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Exact satisfiability for finite disjunctions of rational difference bounds."""
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from fractions import Fraction
 from itertools import pairwise
@@ -126,17 +126,19 @@ def solve(problem: Problem) -> Assignment | None:
     return None
 
 
-def minimal_conflict(problem: Problem) -> tuple[int, ...] | None:
+def minimal_conflict(
+    problem: Problem, *, solver: Callable[[Problem], Assignment | None] = solve
+) -> tuple[int, ...] | None:
     """Find an inclusion-minimal set of incompatible clause indices.
 
     The subset is deterministic in input order. It need not have minimum
     cardinality among all possible conflicting subsets.
     """
-    if solve(problem) is not None:
+    if solver(problem) is not None:
         return None
     remaining = list(range(len(problem)))
     for index in range(len(problem)):
         candidate = [other for other in remaining if other != index]
-        if solve(tuple(problem[other] for other in candidate)) is None:
+        if solver(tuple(problem[other] for other in candidate)) is None:
             remaining = candidate
     return tuple(remaining)

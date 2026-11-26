@@ -13,6 +13,12 @@ license-files = ["LICENSE"]
 authors = [{ name = "Mariia Steeghs-Turchina" }]
 dependencies = []
 
+[project.scripts]
+clockcheck = "quaecer.clockcheck.cli:main"
+
+[project.optional-dependencies]
+z3 = ["z3-solver>=4.16,<5"]
+
 [project.urls]
 Source = "https://github.com/quaecer/clockcheck"
 
@@ -33,6 +39,10 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 strict = true
 mypy_path = "src"
 explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["z3", "z3.*"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

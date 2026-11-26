@@ -23,4 +23,22 @@ This is a conditional check of the declared model and input constraints.
 
 Apache-2.0.
 
+## JSON interface
+
+`clockcheck` reads a `clock-problem@1` document from standard input.
+For example, this single strict bound places `a` below one third.
+
+```json
+{"format":"clock-problem@1","clauses":[[{"left":"a","right":null,"limit":"1/3","strict":true}]]}
+```
+
+A clause is an array of alternative bounds, and the clauses jointly hold.
+Use `null` for the fixed zero. Limits are decimal integer strings or
+fractions with positive denominators. A compatible result includes
+rational values as strings. An incompatible result includes a
+subset-minimal list of zero-based clause indices.
+
+Install the `z3` extra to run `clockcheck --backend z3`. CI compares
+the optional solver with the native solver on seeded rational formulas.
+
 Copyright 2026 Mariia Steeghs-Turchina
