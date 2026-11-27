@@ -29,6 +29,8 @@ jobs:
     - run: uv run --locked ruff format --check .
     - run: uv run --locked mypy src
     - run: uv run --locked pytest
+    - if: matrix.python == '3.12'
+      run: uv run --locked --extra z3 pytest tests/property
   stdlib-only:
     runs-on: ubuntu-latest
     steps:
